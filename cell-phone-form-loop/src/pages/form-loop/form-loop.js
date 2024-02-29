@@ -5,7 +5,9 @@ import InputLoop from '../../components/input-loop/input-loop';
 import CheckBoxLoop from '../../components/check-box-loop/check-box-loop';
 import './form-loop.scss';
 
-function FormLoop (){
+function FormLoop ({onChange}){
+
+  
 
   const { protocol } = useContext(ProtocolContext);
   const [formValues,setformValues]= useState([]);
@@ -20,7 +22,7 @@ function FormLoop (){
       valuesSelectObj=[...removeOld,...[fieldRow]];
       setformValues(valuesSelectObj);
     } else{
-      valuesSelectObj = [...formValues, ...[{id:item.id, value:option}]];
+      valuesSelectObj = [...formValues, ...[{id:item.id,label:item.label,type:item.type, value:option}]];
       setformValues(valuesSelectObj);
     }
   };
@@ -42,56 +44,63 @@ function FormLoop (){
       valuesSelectObj=[...removeOld,...[fieldRow]];
       setformValues(valuesSelectObj);
     } else{
-      valuesSelectObj = [...formValues, ...[{id:item.id, value}]];
+      valuesSelectObj = [...formValues, ...[{id:item.id,label:item.label,type:item.type, value}]];
       setformValues(valuesSelectObj);
     }
 
   };
 
-  //----- Input methods --------//
+  //----------------------------------//
   //----- CheckBox methods-------//
   const handleCheckBox = (item,value) => {
     let valuesSelectObj;
     const fieldRow = formValues.find((field)=>field.id === item.id);
     if(fieldRow){
       fieldRow.value = value;
-      const removeOld= formValues.filter((value)=> value.id !== item.id);
+      const removeOld= formValues.filter((formValue)=> formValue.id !== item.id);
       valuesSelectObj=[...removeOld,...[fieldRow]];
       setformValues(valuesSelectObj);
     } else{
-      valuesSelectObj = [...formValues, ...[{id:item.id, value}]];
+      valuesSelectObj = [...formValues, ...[{id:item.id,label:item.label,type:item.type, value}]];
       setformValues(valuesSelectObj);
     }
     
   };
-  //----- CheckBox methods-------//
+  //---------------------------------//
+  const submitInfo= () =>{
+    onChange(formValues);
+  };
 
   const form = protocol.items?.map((item) => {
       if(item.type === "input:select"){
         return (
-        <div className="row">
-          <SelectLoop key ={item.id}  item={item} selected={getSelectedValue(item.id)} onChange={(e) => handleSelection(item, e)}/>
+        <div key ={item.id} className="row">
+          <SelectLoop  item={item} selected={getSelectedValue(item.id)} onChange={(e) => handleSelection(item, e)}/>
         </div>);
       } else if(item.type === "input:text" || item.type === 'input:number'){
           const type = item.type.split(':')
           return ( 
-          <div className="row">
-            <InputLoop key ={item.id} type={type[1]} item={item} onChange={(e) => handleInput(item,e)}/>
+          <div key ={item.id}  className="row">
+            <InputLoop type={type[1]} item={item} onChange={(e) => handleInput(item,e)}/>
           </div>);
       } else if(item.type === 'input:bool'){
           return (
-            <div className="row">
-              <CheckBoxLoop key ={item.id} item={item} onChange={(e)=>handleCheckBox(item,e)}/>
+            <div key ={item.id} className="row">
+              <CheckBoxLoop  item={item} onChange={(e)=>handleCheckBox(item,e)}/>
             </div>);  
       }
-      
-      return null;
+      return'';
     });
 
   return (
     <section className="form-loop-container">
+      <div>
       <h2>FormLoop</h2>
         {form}
+      </div>
+      <footer>
+        <div><button onClick={submitInfo}>Submeter</button></div>
+      </footer>
     </section>);
 }
 

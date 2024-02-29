@@ -1,4 +1,11 @@
 .select-container{
+
+    .error{
+        span{
+            color:red;
+        }
+    }
+    
     .select-drop-content{
         background-color: white;
         display: flex;
@@ -7,7 +14,7 @@
         position: relative;
         justify-content: space-between;
         
-
+        
         .select-drop-value{
             background-color: rgb(241, 241, 241);
             padding: 10px;
@@ -34,12 +41,39 @@
 
             .dropdown-option{
                 padding: 5px;
+                height: 30px;
                 border-radius: 5px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                .selected{
+                    background-color: rgb(114, 92, 255);
+                    color: white; 
+                }
+                
+                & > div{
+                    width: 20px;
+                    height: 20px;
+                    opacity: 0;
+                }
+            }
+            &>.selected{
+                background-color: rgb(114, 92, 255);
+                color: white; 
             }
             &>:hover{
                 background-color: rgb(114, 92, 255);
                 cursor: pointer;
                 color: white;
+
+                 div{
+                    opacity: 1;
+                }
+            }
+
+            &>.selected{
+                & > div{
+                opacity: 1;}
             }
         }
     }
@@ -52,7 +86,7 @@
             border-radius: 5px;
             padding:15px;
             margin:5px;
-        }
+         }
         &>.selected{
             background-color: rgb(114, 92, 255);
             color: white; 
